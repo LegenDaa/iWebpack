@@ -1,0 +1,18 @@
+//开发环境和生产环境的配置
+module.exports={
+    development:(config)=>({
+        compiler_public_path:`http://${config.server_host}/${config.server_port}`
+    }),
+    production:(config)=>({
+        compiler_public_path:`/static`,
+        compiler_base_route:"/apps/",
+        compiler_fail_on_warning:false,
+        compiler_hash_type:"chunkhash",
+        compiler_devtool:false,
+        compiler_stats:{
+            chunk:true,
+            chunkModules:true,
+            color:true
+        }
+    })
+}
