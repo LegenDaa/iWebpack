@@ -1,8 +1,10 @@
 const path=require("path")
-const debug=require("debug")("app:config:webpack");
+const debug=require("debug")("app:config:project");
+const ip=require("ip");
 //声明初始的配置
 const config={
     env:process.env.NODE_ENV||"development",//process：node进程实例
+    //Project Structure
     path_base:path.resolve(__dirname,".."),//path详解:http://www.jianshu.com/p/fe41ee02efc8
     dir_client:"src",
     dir_dist:"dist",
@@ -11,8 +13,8 @@ const config={
     dir_test:"tests",
 
     //server config
-    server_host:"127.0.0.1",
-    server_port:process.env.PORT||"3000",
+    server_host:ip.address(),//http://127.0.0.1
+    server_port:process.env.PORT||3000,
 
     //compiler config
     compiler_devtool:"source-map",
@@ -26,6 +28,31 @@ const config={
         colors:true
     }
 }
+
+config.globals={
+    "process.env":{
+        "NODE_ENV":JSON.stringify(config.env)
+    },
+    "filename":"index.html",
+    "NODE_ENV":config.env,
+    "__DEV__":config.env=="development",
+    "__PROD__":config.env="production",
+    "__TEST__":config.env="test"
+}
+
+/* ************ */
+    // Utiliies
+/* ************ */
+function base(){
+    const args=[config.path_base].concat([].slice.call(arguments));
+    return path.resolve.apply(path,args)
+}
+
+config.paths={
+    base: base,
+    node_modules:base.bind(null,config.node_modules),
+}
+
 
 const environments=require("./environments.config")
 const overrides=environments[config.env]

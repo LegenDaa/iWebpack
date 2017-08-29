@@ -1,4 +1,5 @@
 //开发环境和生产环境的配置
+//基础配置选项，后续可根据环境进行覆盖
 module.exports={
     development:(config)=>({
         compiler_public_path:`http://${config.server_host}/${config.server_port}`

@@ -5,6 +5,8 @@ const qs=require("querystring");//字符串格式化
 const proxyConfig=require("./proxy.config");
 const app=express();
 const project = require("../config/project.config");
+const webpackConfig=require("../config/webpack.config");
+const debug=require("debug")("app:main")
 
 //主要点：http-proxy-middleware
 //https://www.npmjs.com/package/http-proxy-middleware
@@ -42,3 +44,20 @@ proxyConfig.forEach(function(item) {
     app.use(item.url,proxy(createProxySetting(item.target)))
 });
 
+
+//调用webpack中间件
+if(project.env="development"){
+    const compiler=webpack(webpackConfig);
+    const devMiddleware=require("webpack-dev-middleware")(compiler,{
+        publicPath:webpackConfig.output.publicPath,
+        contentBase:project.path_base.client(),
+        hot:true,
+        quiet:project.compiler_quiet,
+        noInfo:project.compiler_quiet,
+        lazy:false,
+        stats:project.compiler_stats
+    })
+    app.use(devMiddleware);
+}else if(project.env="production"){
+
+}
