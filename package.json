@@ -8,6 +8,14 @@
     "project-config":"node ./config/project.config.js",
     "main":"node ./server/main.js"
   },
+  "betterScripts":{
+    "test":{
+      "command":"node config/project.config",
+      "env":{
+        "DEBUG":"app:*"
+      }
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LegenDaa/iWebpack.git"
